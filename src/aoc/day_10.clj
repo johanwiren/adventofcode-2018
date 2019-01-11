@@ -1,17 +1,17 @@
 (ns aoc.day-10
   (:require [clojure.java.io :as io]))
 
-(def p1-small-input (-> "aoc-day-10-small.txt"
-                        io/resource
-                        io/reader
-                        line-seq))
+(defn small-input []
+  (-> "aoc-day-10-small.txt"
+      io/resource
+      io/reader
+      line-seq))
 
-(def p1-input (-> "aoc-day-10.txt"
-                  io/resource
-                  io/reader
-                  line-seq))
-
-(re-seq #"-?\d+" "position=< 9,  1> velocity=< 0,  2>")
+(defn input []
+  (-> "aoc-day-10.txt"
+      io/resource
+      io/reader
+      line-seq))
 
 (defn p1-parse-input [lines]
   (for [line lines]
@@ -26,8 +26,7 @@
 (defn p1-move [{:keys [vlcty-x vlcty-y] :as point}]
   (-> point
       (update :pos-x + vlcty-x)
-      (update :pos-y + vlcty-y)
-      #_(->> (clojure.tools.logging/spy :info))))
+      (update :pos-y + vlcty-y)))
 
 (defn p1-print-matrix-size [points]
   (let [xs (->> points (map :pos-x))
@@ -57,7 +56,7 @@
     points)
 
   (loop [seconds 0
-         points (p1-parse-input p1-input)]
+         points (p1-parse-input (input))]
     (let [max-x (->> points (map :pos-x) (apply max))]
       (if (< 205 max-x)
         (recur (inc seconds) (map p1-move points))

@@ -1,11 +1,12 @@
 (ns aoc.day-4
   (:require [clojure.java.io :as io]))
 
-(def p1-input (->> "aoc-day-4.txt"
-                      io/resource
-                      io/reader
-                      line-seq
-                      sort))
+(defn input []
+  (->> "aoc-day-4.txt"
+       io/resource
+       io/reader
+       line-seq
+       sort))
 
 (defn solver [input sort-key]
   (let [log (loop [lines input
@@ -40,10 +41,12 @@
          (sort-by sort-key)
          last)))
 
-(def p1-solution (->> (solver p1-input :minutes-slept)
-                         ((juxt :guard :best-minute))
-                         (apply *)))
+(defn p1-solution []
+  (->> (solver (input) :minutes-slept)
+       ((juxt :guard :best-minute))
+       (apply *)))
 
-(def p2-solution (->> (solver p1-input :best-minute-count)
-                         ((juxt :guard :best-minute))
-                         (apply *)))
+(defn p2-solution []
+  (->> (solver (input) :best-minute-count)
+       ((juxt :guard :best-minute))
+       (apply *)))

@@ -1,7 +1,11 @@
 (ns aoc.day-2
   (:require [clojure.java.io :as io]))
 
-(def p1-input (-> "aoc-day-2.txt" io/resource io/reader line-seq))
+(defn input []
+  (-> "aoc-day-2.txt"
+      io/resource
+      io/reader
+      line-seq))
 
 (defn p1-count-box [box]
   (->> box
@@ -12,13 +16,12 @@
                1
                0))))
 
-(def p1-solution
-  (delay
-   (->> p1-input
-        (map p1-count-box)
-        (apply map vector)
-        (map (partial reduce +))
-        (apply *))))
+(defn p1-solution []
+  (->> (input)
+       (map p1-count-box)
+       (apply map vector)
+       (map (partial reduce +))
+       (apply *)))
 
 (defn p2-found-packages? [p1 p2]
   (->> (map vector p1 p2)
@@ -39,5 +42,6 @@
       (when (next tail)
         (recur (first tail) (next tail))))))
 
-(def p2-solution (delay (p2-solver p1-input)))
+(defn p2-solution []
+  (p2-solver (input)))
 

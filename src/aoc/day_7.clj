@@ -2,7 +2,7 @@
   (:require [clojure.java.io :as io]
             [weavejester.dependency :as dependency]))
 
-(def p1-small-input
+(defn small-input []
   ["Step C must be finished before step A can begin."
    "Step C must be finished before step F can begin."
    "Step A must be finished before step B can begin."
@@ -11,10 +11,11 @@
    "Step D must be finished before step E can begin."
    "Step F must be finished before step E can begin."])
 
-(def p1-input (->> "aoc-day-7.txt"
-                      io/resource
-                      io/reader
-                      line-seq))
+(defn input []
+  (->> "aoc-day-7.txt"
+       io/resource
+       io/reader
+       line-seq))
 
 (defn p1-lexical-comparator [x y]
   (compare (name x) (name y)))
@@ -40,11 +41,12 @@
       (recur (dependency/remove-all graph node) (conj sorted node))
       sorted)))
 
-(def p1-solution (->> (p1-deps p1-input)
-                         p1-sorter
-                         (map name)
-                         (apply str)
-                         time))
+(defn p1-solution []
+  (->> (p1-deps (input))
+       p1-sorter
+       (map name)
+       (apply str)
+       time))
 
 (def p2-min-step-duration 60)
 (def p2-num-workers 5)
@@ -89,4 +91,5 @@
           (recur graph (+ time-elapsed tick) (map #(p2-do-work % tick) new-tasks)))
         time-elapsed))))
 
-(def p2-solution (delay (p2-solver p1-input)))
+(defn p2-solution []
+  (p2-solver (input)))

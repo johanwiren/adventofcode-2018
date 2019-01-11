@@ -2,11 +2,12 @@
   (:require [clojure.java.io :as io]
             [clojure.string :as str]))
 
-(def p1-input (->> "aoc-day-5.txt"
-                      io/resource
-                      io/reader
-                      slurp
-                      str/trim-newline))
+(defn input []
+  (->> "aoc-day-5.txt"
+       io/resource
+       io/reader
+       slurp
+       str/trim-newline))
 
 (defn p1-reacts? [p1 p2]
   (and p1 p2
@@ -21,7 +22,8 @@
                    (cons p acc)))
                '())))
 
-(def p1-reduction (p1-reducer p1-input))
+(defn p1-reduction []
+  (p1-reducer (input)))
 
 (defn p1-solution []
   (count p1-reduction))
@@ -32,14 +34,15 @@
     "[" (str/lower-case p) (str/upper-case p) "]")))
 
 (defn p2-solver []
-  (->> p1-reduction
-       set
-       (map str/lower-case)
-       set
-       (pmap (fn [p]
-              (let [re (p2-mk-re p)]
-                (-> (apply str p1-reduction)
-                    (str/replace re "")
-                    p1-reducer
-                    count))))
-       (apply min)))
+  (let [reduction (p1-reduction)]
+    (->> reduction
+         set
+         (map str/lower-case)
+         set
+         (map (fn [p]
+                 (let [re (p2-mk-re p)]
+                   (-> (apply str reduction)
+                       (str/replace re "")
+                       p1-reducer
+                       count))))
+         (apply min))))

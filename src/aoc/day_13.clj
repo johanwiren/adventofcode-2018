@@ -30,7 +30,7 @@
    :down :left})
 
 (defn build-cart [input-char x y]
-  (when ((-> input-to-track keys set) input-char)
+  (when (to-direction input-char)
     {:direction (to-direction input-char)
      :position [x y]
      :xing-actions (flatten (repeat [turn-left identity turn-right]))}))
@@ -45,8 +45,8 @@
                               [x y]
                               (get input-to-track input-char input-char))
                        tracks-acc)
-              carts (if (contains? (-> to-direction keys set) input-char)
-                      (conj carts-acc (build-cart input-char x y))
+              carts (if-let [cart (build-cart input-char x y)]
+                      (conj carts-acc cart)
                       carts-acc)]
           [tracks carts]))
       [tracks carts]
@@ -137,6 +137,8 @@
         carts))
 
 (defn p1-solver []
+  ;; Will throw an exception when a collision accurs containing
+  ;; the position of the collision
   (let [[tracks carts] (input :large)]
     (loop [carts carts]
       (recur (tick carts tracks)))))

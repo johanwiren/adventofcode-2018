@@ -2,15 +2,17 @@
   (:require [clojure.java.io :as io]
             [clojure.string :as str]))
 
-(def small-input (-> "aoc-day-12-small.txt"
-                     io/resource
-                     io/reader
-                     line-seq))
+(defn small-input []
+  (-> "aoc-day-12-small.txt"
+      io/resource
+      io/reader
+      line-seq))
 
-(def input (-> "aoc-day-12.txt"
-               io/resource
-               io/reader
-               line-seq))
+(defn input []
+  (-> "aoc-day-12.txt"
+      io/resource
+      io/reader
+      line-seq))
 
 (defn parse-input [input]
   (let [[init-line notes]
@@ -36,7 +38,7 @@
     (for [i (range (- (count pots) 4))]
       (subs pots i (+ i 5)))))
 
-(defn p2-print-pots [pots]
+(defn print-pots [pots]
   (let [pre (count (first (re-seq #"^\.+" pots)))
         post (count (first (re-seq #"\.+$" pots)))
         printable-pots (-> pots
@@ -51,7 +53,7 @@
                             (str new-pots (p1-apply-notes window notes)))
                           ""
                           (p1-sliding-window pots))]
-              (p2-print-pots new-pots)
+              (print-pots new-pots)
               (-> gen
                   (assoc :pots new-pots)
                   (update :leftmost-pot #(- % 2)))))
@@ -62,7 +64,7 @@
   ([]
    (p1-get-sum 20))
   ([generations]
-   (let [[gen notes] (-> input
+   (let [[gen notes] (-> (input)
                          parse-input)
          res (time (p1-generate gen notes generations))]
      (->> (map-indexed (fn [i item]
@@ -79,4 +81,3 @@
     (+ res1
        (* (- 50000000000 200)
           (- res2 res1)))))
-

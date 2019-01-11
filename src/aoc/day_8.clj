@@ -1,10 +1,13 @@
 (ns aoc.day-8
   (:require [clojure.java.io :as io]))
 
-(def p1-small-input "2 3 0 3 10 11 12 1 1 0 1 99 2 1 1 2")
-(def p1-input (-> "aoc-day-8.txt"
-                  io/resource
-                  slurp))
+(defn small-input []
+  "2 3 0 3 10 11 12 1 1 0 1 99 2 1 1 2")
+
+(defn input []
+  (-> "aoc-day-8.txt"
+      io/resource
+      slurp))
 
 (defn p1-parse-input [input-str]
   (->> input-str
@@ -34,15 +37,15 @@
                   (apply + meta-data))]
       [[value] more-data])))
 
-(def p1-solution
-  (delay (->> p1-input
-              p1-parse-input
-              p1-build-node
-              first
-              (apply +))))
+(defn p1-solution []
+  (->> (input)
+       p1-parse-input
+       p1-build-node
+       first
+       (apply +)))
 
-(def p2-solution
-  (delay (->> p1-input
-              p1-parse-input
-              p2-build-node
-              first)))
+(defn p2-solution []
+  (->> (input)
+       p1-parse-input
+       p2-build-node
+       first))
